@@ -5,6 +5,7 @@ on:
     branches:
       - "build-octofit-app"
     paths:
+      - ".github/workflows/2-application-initial-setup.yml"
       - "octofit-tracker/frontend/package.json"
       - "octofit-tracker/backend/package.json"
 
