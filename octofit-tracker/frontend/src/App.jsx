@@ -1,81 +1,37 @@
-import { useEffect, useState } from 'react'
+import { NavLink, Route, Routes } from 'react-router-dom'
+import Activities from './components/Activities.jsx'
+import Leaderboard from './components/Leaderboard.jsx'
+import Teams from './components/Teams.jsx'
+import Users from './components/Users.jsx'
+import Workouts from './components/Workouts.jsx'
 import './App.css'
 
 function App() {
-  const [activities, setActivities] = useState([])
-  const [leaderboard, setLeaderboard] = useState([])
-  const [teams, setTeams] = useState([])
-
-  useEffect(() => {
-    const loadData = async () => {
-      const [activitiesRes, leaderboardRes, teamsRes] = await Promise.all([
-        fetch('/api/activities'),
-        fetch('/api/leaderboard'),
-        fetch('/api/teams'),
-      ])
-
-      setActivities(await activitiesRes.json())
-      setLeaderboard(await leaderboardRes.json())
-      setTeams(await teamsRes.json())
-    }
-
-    loadData()
-  }, [])
-
   return (
     <main className="octofit-shell">
-      <section className="hero-card card shadow-sm p-4 mb-4">
+      <section className="hero-card card shadow-sm p-4 mb-4 text-start">
         <p className="eyebrow">OctoFit Tracker</p>
         <h1>Fitness challenges, team spirit, and progress at a glance.</h1>
-        <p className="lead">This dashboard pulls live activity and leaderboard data from the backend API.</p>
+        <p className="lead">Navigate the activity, leaderboard, teams, users, and workout views from one dashboard.</p>
       </section>
 
-      <section className="row g-4 mb-4">
-        <article className="col-md-4">
-          <div className="card shadow-sm p-3 h-100">
-            <h2>Recent activity</h2>
-            <ul className="list-unstyled mb-0">
-              {activities.map((item) => (
-                <li key={item._id} className="activity-item">
-                  <strong>{item.student}</strong> — {item.activity} ({item.durationMinutes} min)
-                  <span className="badge text-bg-success">+{item.points} pts</span>
-                </li>
-              ))}
-            </ul>
-          </div>
-        </article>
+      <nav className="nav nav-pills mb-4 gap-2">
+        <NavLink className="nav-link btn btn-outline-primary" to="/">Home</NavLink>
+        <NavLink className="nav-link btn btn-outline-primary" to="/activities">Activities</NavLink>
+        <NavLink className="nav-link btn btn-outline-primary" to="/leaderboard">Leaderboard</NavLink>
+        <NavLink className="nav-link btn btn-outline-primary" to="/teams">Teams</NavLink>
+        <NavLink className="nav-link btn btn-outline-primary" to="/users">Users</NavLink>
+        <NavLink className="nav-link btn btn-outline-primary" to="/workouts">Workouts</NavLink>
+      </nav>
 
-        <article className="col-md-4">
-          <div className="card shadow-sm p-3 h-100">
-            <h2>Leaderboard</h2>
-            <ol className="mb-0 ps-3">
-              {leaderboard.map((entry, index) => (
-                <li key={entry._id} className="leaderboard-item">
-                  <span>{entry._id}</span>
-                  <strong>{entry.totalPoints} pts</strong>
-                  <small>{entry.workouts} workouts</small>
-                  <span className="rank-pill">#{index + 1}</span>
-                </li>
-              ))}
-            </ol>
-          </div>
-        </article>
-
-        <article className="col-md-4">
-          <div className="card shadow-sm p-3 h-100">
-            <h2>Teams</h2>
-            <ul className="list-unstyled mb-0">
-              {teams.map((team) => (
-                <li key={team._id} className="team-item">
-                  <strong>{team.name}</strong>
-                  <span>Captain: {team.captain}</span>
-                  <span>{team.points} pts</span>
-                </li>
-              ))}
-            </ul>
-          </div>
-        </article>
-      </section>
+      <Routes>
+        <Route path="/" element={<section className="row g-4"><article className="col-md-6"><Activities /></article><article className="col-md-6"><Leaderboard /></article></section>} />
+        <Route path="/activities" element={<Activities />} />
+        <Route path="/leaderboard" element={<Leaderboard />} />
+        <Route path="/teams" element={<Teams />} />
+        <Route path="/users" element={<Users />} />
+        <Route path="/workouts" element={<Workouts />} />
+      </Routes>
     </main>
   )
 }
