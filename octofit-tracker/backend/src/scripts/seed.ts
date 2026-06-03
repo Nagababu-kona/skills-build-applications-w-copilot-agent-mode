@@ -1,5 +1,6 @@
 import dotenv from 'dotenv';
 import mongoose from 'mongoose';
+import { connectToDatabase, mongoUri } from '../config/database.js';
 import { Activity } from '../models/Activity.js';
 import { Leaderboard } from '../models/Leaderboard.js';
 import { Team } from '../models/Team.js';
@@ -9,10 +10,9 @@ import { Workout } from '../models/Workout.js';
 dotenv.config();
 
 // Seed the octofit_db database with test data
-const mongoUri = process.env.MONGODB_URI || 'mongodb://127.0.0.1:27017/octofit_db';
 
 const seedData = async () => {
-  await mongoose.connect(mongoUri);
+  await connectToDatabase();
   console.log('Connected to MongoDB at', mongoUri);
 
   await Promise.all([
